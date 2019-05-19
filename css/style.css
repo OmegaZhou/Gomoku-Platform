@@ -1,0 +1,92 @@
+body{
+    background: rgb(65, 64, 64);
+}
+#game_bg{
+    position: relative;
+    top: 50px;
+    margin: 0 auto;
+    background: url("../resources/board_base.jpg");
+}
+.board{
+    position: relative;
+    top: -95%;
+    left: 5%;
+    width: 100%;
+    height: 100%;
+}
+.board_line{
+    top: 8%;
+    left: 8%;
+}
+.board_row {
+    box-sizing:border-box;
+    height: 6%;
+    width: 100%;
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+.item{
+    box-sizing: border-box;
+    display: inline-block;
+    width: 6%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.wait_go.unset.white:hover{
+    background-size: cover;
+    background-image: url(../resources/wait_white_go.png)
+}
+.wait_go.unset.black:hover{
+    background-size: cover;
+    background-image: url(../resources/wait_black_go.png)
+}
+.set.white{
+    background-size: cover;
+    background-image: url(../resources/white_go.png)
+}
+
+.set.black{
+    background-size: cover;
+    background-image: url(../resources/black_go.png)
+}
+
+.left_border{
+    border-left-style: solid;
+}
+.bottom_border{
+    border-bottom-style: solid;
+}
+
+.right_border{
+    border-right-style: solid;
+}
+.top_border{
+    border-top-style: solid;
+}
+
+.index{
+    position: absolute;
+    width: 20%;
+    left: 40%;
+    top: 30%;
+    background: white;
+}
+
+#button{
+    text-align: center;
+}
+.button{
+    margin: 5%;
+}
+
+#room{
+    position: absolute;
+    width: 30%;
+    text-align: center;
+    left: 30%;
+    top: 30%;
+    background-image: url("../resources/board_base.jpg");
+}

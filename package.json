@@ -1,0 +1,28 @@
+{
+  "name": "gomoku-platform",
+  "version": "1.0.0",
+  "description": "A platform for gomoku",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmegaZhou/Gomoku-Platform.git"
+  },
+  "author": "Zhou YD",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OmegaZhou/Gomoku-Platform/issues"
+  },
+  "homepage": "https://github.com/OmegaZhou/Gomoku-Platform#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.0",
+    "express-session": "^1.16.1",
+    "http": "0.0.0",
+    "jsonfile": "^5.0.0",
+    "mysql": "^2.17.1",
+    "socket.io": "^2.2.0"
+  }
+}
