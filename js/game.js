@@ -3,17 +3,19 @@ const AI = 1;
 const HUMAN = 2;
 function Game() {
     var board = new Board();
-    this.start_local_game = function () {
+    var init = function () {
+        $('#win_message').hide();
         board.clear();
         board.init();
+    }
+    this.start_local_game = function () {
+        init();
         var call_back = function (r, c, color) {
             board.set_go(r, c, color);
             board.end_wait();
             var r = board.judge_result();
             if (r != 0) {
                 win(r)
-                board.clear();
-                board.init();
                 return;
             }
             if (color == 'black') {
@@ -25,8 +27,7 @@ function Game() {
         board.wait_set('black', call_back);
     }
     this.start_with_ai = function (human_color) {
-        board.clear();
-        board.init();
+        init();
         var get_place = function () {
             $.post('get_place', { user_id: 0, place: board.get_board() }, function (data) {
                 other_place(data.r, data.c, 0);
@@ -42,7 +43,7 @@ function Game() {
             board.set_go(r, c, other_color);
             var re = board.judge_result();
             if (re != 0) {
-                win(r);
+                win(re);
                 return;
             }
             board.wait_set(human_color, my_place);
@@ -66,9 +67,12 @@ function Game() {
 
     function win(state) {
         if (state == 1) {
-            alert('Black win');
-        } else {
-            alert('White win');
+            $('#message').html('Black win');
+        } else if (state == 2) {
+            $('#message').html('White win');
+        }else{
+            return;
         }
+        $('#win_message').show();
     }
 }

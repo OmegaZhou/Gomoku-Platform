@@ -86,7 +86,21 @@ body{
     position: absolute;
     width: 30%;
     text-align: center;
-    left: 30%;
+    left: 35%;
     top: 30%;
     background-image: url("../resources/board_base.jpg");
+}
+
+.button-margin{
+    margin: 2%;
+}
+
+#win_message{
+    background-color: yellowgreen; 
+    position: absolute;
+    z-index: 999;
+    width: 20%;
+    left: 40%;
+    top: 40%;
+    text-align: center;
 }
