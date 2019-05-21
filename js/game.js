@@ -127,7 +127,10 @@ function Game() {
                 end_wait();
             })
         } else {
-            end_wait();
+            $('#message').html('正在加入');
+            socket.on('ok', function () {
+                end_wait();
+            })
         }
 
 

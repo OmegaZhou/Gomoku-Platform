@@ -32,7 +32,7 @@ function init_room() {
     $('#net_black').click(function () {
         $.post('create_room', { color: 'black' }, function (data) {
             if (data != -1) {
-                window.location.href = '/board.html?color=black&room=' + data;
+                window.location.href = '/board.html?type=2&status=0&color=black&room=' + data;
             } else {
                 window.location.href = '/index.html';
             }
@@ -41,7 +41,7 @@ function init_room() {
     $('#net_white').click(function () {
         $.post('create_room', { color: 'white' }, function (data) {
             if (data != -1) {
-                window.location.href = '/board.html?type=2&color=white&room=' + data;
+                window.location.href = '/board.html?type=2&status=0&color=white&room=' + data;
             } else {
                 window.location.href = '/index.html';
             }
@@ -80,13 +80,23 @@ function init_room() {
                     state_label.attr('href','javascript:void(0);');
                     state_label.html('加入');
                     state_label.click(function(){
-                        var href='/board.html?type=2&room='+info.room_id+'&color=';
+                        var href='/board.html?type=2&status=1&room='+info.room_id+'&color=';
                         if(info.room_info.black==''){
                             href+='black';
                         }else{
                             href+='white';
                         }
-                        window.location.href=href;
+                        $.post('join',{room_id:info.room_id},function(data){
+                            console.log($(this));
+                            if(data==1){
+                                window.location.href=href;
+                            }else if(data==0){
+                                get_room();
+                            }else{
+                                window.location.href='/index.html';
+                            }
+                        })
+                        
                     });
                 }
                 state.append(state_label);

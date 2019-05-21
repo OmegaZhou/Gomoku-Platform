@@ -3,8 +3,8 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var http=require('http').Server(app);
-var io=require('socket.io')(http);
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 var database = require('./lib/database');
 var ai = require('./lib/ai');
 
@@ -16,40 +16,40 @@ app.use("/js", express.static("js"));
 app.use("/lib", express.static("lib"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
-    secret :  'gomoku',
-    resave : true,
-    saveUninitialized: false, 
-    cookie : {
-        maxAge : 1000*60*30, 
+    secret: 'gomoku',
+    resave: true,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 1000 * 60 * 30,
     }
 }));
 app.get('/', function (req, res) {
-    if(req.session.user_id){
+    if (req.session.user_id) {
         res.sendFile(__dirname + '/html/room.html');
-    }else{
+    } else {
         res.sendFile(__dirname + '/html/index.html');
     }
 });
 app.get('/index.html', function (req, res) {
-    if(req.session.user_id){
+    if (req.session.user_id) {
         res.sendFile(__dirname + '/html/room.html');
-    }else{
+    } else {
         res.sendFile(__dirname + '/html/index.html');
     }
 });
 
-app.get('/room.html',function(req,res){
-    if(req.session.user_id){
+app.get('/room.html', function (req, res) {
+    if (req.session.user_id) {
         res.sendFile(__dirname + '/html/room.html');
-    }else{
+    } else {
         res.sendFile(__dirname + '/html/index.html');
     }
 });
 
-app.get('/board.html',function(req,res){
-    if(req.session.user_id){
+app.get('/board.html', function (req, res) {
+    if (req.session.user_id) {
         res.sendFile(__dirname + '/html/board.html');
-    }else{
+    } else {
         res.sendFile(__dirname + '/html/index.html');
     }
 });
@@ -62,19 +62,19 @@ app.post('/get_place', bodyParser.json(), function (req, res) {
 });
 
 app.post('/signin', bodyParser.json(), function (req, res) {
-    if(req.session.user_name){
-        res.send({is_success:1,user_id:req.session.user_id});
-    }else{
+    if (req.session.user_name) {
+        res.send({ is_success: 1, user_id: req.session.user_id });
+    } else {
         mysql.sign_in(req.body.name, req.body.password, function (data) {
-            if(data.is_success==1){
+            if (data.is_success == 1) {
                 console.log(req.session);
-                req.session.user_name=req.body.name;
-                req.session.user_id=data.user_id;
+                req.session.user_name = req.body.name;
+                req.session.user_id = data.user_id;
             }
             res.send(data);
         });
     }
-    
+
 });
 
 app.post('/signup', bodyParser.json(), function (req, res) {
@@ -85,44 +85,79 @@ app.post('/signup', bodyParser.json(), function (req, res) {
     });
 });
 
-var room=new Map();
-app.post('/create_room',bodyParser.json(), function (req, res){
+var room = new Map();
+app.post('/create_room', bodyParser.json(), function (req, res) {
     console.log('create_room');
-    if(req.session.user_id){
-        for(var i=0;i<1000;++i){
-            if(room.has(i)){
+    if (req.session.user_id) {
+        for (var i = 0; i < 1000; ++i) {
+            if (room.has(i)) {
                 continue;
-            }else{
-                if(req.body.color=='black'){
-                    room.set(i,{black:req.session.user_name,white:''});
-                }else{
-                    room.set(i,{white:req.session.user_name,black:''});
+            } else {
+                if (req.body.color == 'black') {
+                    room.set(i, { black: req.session.user_name, white: '' });
+                } else {
+                    room.set(i, { white: req.session.user_name, black: '' });
                 }
                 res.send(i.toString());
                 break;
             }
         }
-    }else{
+    } else {
         res.send('-1');
     }
 });
 
-app.post('/get_room',function(req,res){
-    var temp=new Array();
-    for(var i of room){
-        temp.push({room_id:i[0],room_info:i[1]});
+app.post('/join', bodyParser.json(), function (req, res) {
+    if (req.session.user_id) {
+        var flag = 1;
+        for (var i of room) {
+            if (req.body.room_id == i[0]) {
+
+                if (i[1].black == '') {
+                    i[1].black = req.session.user_name;
+                } else if (i[1].white == '') {
+                    i[1].white = req.session.user_name;
+                } else {
+                    flag = 0;
+                }
+                res.send(flag.toString());
+                flag = -2;
+                break;
+            }
+        }
+        if (flag != -2) {
+            res.send('0');
+        }
+
+    } else {
+        res.send('-1');
+    }
+})
+
+app.post('/get_room', function (req, res) {
+    var temp = new Array();
+    for (var i of room) {
+        temp.push({ room_id: i[0], room_info: i[1] });
     }
     res.send(temp);
 });
 
-var room_to_socket=new Map();
-var socket_to_room=new Map();
-io.sockets.on('connection',function(socket){
+var room_to_socket = new Map();
+var socket_to_room = new Map();
+io.sockets.on('connection', function (socket) {
     console.log(socket.id);
-    socket.on('room_info',function(data){
-
+    socket.on('room_info', function (data) {
+        socket_to_room.set(socket.id, data.room_id);
+        if (!room_to_socket.has(data.room_id)) {
+            room_to_socket.set(data.room_id, {black:'', white:''});
+            room_to_socket.get(data.room_id)[data.color] = socket.id;
+        } else {
+            room_to_socket.get(data.room_id)[data.color] = socket.id;
+            io.sockets.connected[ room_to_socket.get(data.room_id).white].emit('ok');
+            io.sockets.connected[ room_to_socket.get(data.room_id).black].emit('ok');
+        }
     });
-    socket.on('disconnect',function(){
+    socket.on('disconnect', function () {
         console.log('User disconnected');
     });
 });

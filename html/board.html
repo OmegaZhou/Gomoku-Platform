@@ -41,6 +41,10 @@
 			} else if (type == AI) {
 				var color = get_url_para('color');
 				game.start_with_ai(color);
+			}else if(type==HUMAN){
+				var color=get_url_para('color');
+				var status=get_url_para('status');
+				game.start_net_game(color,status);
 			}
 		});
 

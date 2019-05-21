@@ -34,6 +34,7 @@ function init_index_page() {
         });
     });
     $('#sign_up').click(function () {
+        init();
         $('#sign_in').hide();
         $('#sign_up').hide();
         $('#second').show();
