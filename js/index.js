@@ -26,7 +26,7 @@ function init_index_page() {
         
         $.post('/signin', { name: $('#user_name').val(), password: $('#user_password').val() }, function (data) {
             if (data.is_success == 1) {
-                $('html').load('/room.html')
+                window.location.href='/room.html';
             }else{
                 $('#message').html('<font color="red">密码或用户名错误</font>');
                 return;

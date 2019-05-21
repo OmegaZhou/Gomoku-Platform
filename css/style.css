@@ -104,3 +104,10 @@ body{
     top: 40%;
     text-align: center;
 }
+.room_full{
+    color: red;
+}
+
+#room_list{
+    text-align: center;
+}

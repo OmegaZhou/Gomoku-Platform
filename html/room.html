@@ -14,6 +14,7 @@
 	<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 	<script src="js/init_room.js"></script>
 </head>
 
@@ -33,10 +34,36 @@
 				role="button">联机模式</a>
 		</div>
 		<div id="ai_menu">
-			<a id="human-black" class="btn btn-default btn-lg btn-primary button-margin"
+			<a id="human_black" class="btn btn-default btn-lg btn-primary button-margin"
 				href="/board.html?type=1&color=black" role="button">黑棋</a>
-			<a id="human-white" class="btn btn-default btn-lg btn-primary button-margin"
+			<a id="human_white" class="btn btn-default btn-lg btn-primary button-margin"
 				href="/board.html?type=1&color=white" role="button">白棋</a>
+			<a class="btn btn-default btn-lg btn-primary button-margin back_to_room" href="javascript:void(0);"
+				role="button">返回</a>
+		</div>
+
+		<div id="net_menu">
+			<a id="create" class="btn btn-default btn-lg btn-primary button-margin" href="javascript:void(0);"
+				role="button">创建房间</a>
+			<a id="join" class="btn btn-default btn-lg btn-primary button-margin join" href="javascript:void(0)"
+				role="button">加入房间</a>
+			<a class="btn btn-default btn-lg btn-primary button-margin back_to_room" href="javascript:void(0);"
+				role="button">返回</a>
+		</div>
+
+		<div id="net_color">
+			<a id="net_black" class="btn btn-default btn-lg btn-primary button-margin" href="javascript:void(0)"
+				role="button">黑棋</a>
+			<a id="net_white" class="btn btn-default btn-lg btn-primary button-margin" href="javascript:void(0)"
+				role="button">白棋</a>
+			<a class="btn btn-default btn-lg btn-primary button-margin back_to_room" href="javascript:void(0);"
+				role="button">返回</a>
+		</div>
+		<div id="room_list">
+			<table id="room_info" class="table table-hover table-bordered">
+			</table>
+			<a class="btn btn-default btn-lg btn-primary button-margin join" href="javascript:void(0);"
+				role="button">刷新</a>
 			<a class="btn btn-default btn-lg btn-primary button-margin back_to_room" href="javascript:void(0);"
 				role="button">返回</a>
 		</div>
