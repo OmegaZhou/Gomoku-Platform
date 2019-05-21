@@ -157,6 +157,15 @@ io.sockets.on('connection', function (socket) {
             io.sockets.connected[ room_to_socket.get(data.room_id).black].emit('ok');
         }
     });
+    socket.on('set_go',function(data){
+        var color;
+        if(data.color=='white'){
+            color='black';
+        }else{
+            color='white';
+        }
+        io.sockets.connected[room_to_socket.get(data.room_id)[color]].emit('other_turn',{state:0,r:data.r,c:data.c});
+    });
     socket.on('disconnect', function () {
         console.log('User disconnected');
     });
