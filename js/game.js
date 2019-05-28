@@ -10,6 +10,8 @@ function Game() {
     }
     this.start_local_game = function () {
         init();
+        $('#black_name').html('Local User 1');
+        $('#white_name').html('Local User 2');
         var call_back = function (r, c, color) {
             board.set_go(r, c, color);
             board.end_wait();
@@ -28,18 +30,30 @@ function Game() {
     }
     this.start_with_ai = function (human_color) {
         init();
+        var other_color;
+        if (human_color == 'black') {
+            other_color = 'white';
+        } else {
+            other_color = 'black';
+        }
+
+        $.post('get_name',function(data){
+            if(data.success){
+                $('#'+human_color+'_name').html(data.name);
+                $('#'+other_color+'_name').html('AI');
+            }else{
+                window.location.href='/index.html'
+            }
+            
+        });
+
         var get_place = function () {
             $.post('get_place', { user_id: 0, place: board.get_board() }, function (data) {
                 other_place(data.r, data.c, 0);
             })
         }
         var other_place = function (r, c, state) {
-            var other_color;
-            if (human_color == 'black') {
-                other_color = 'white';
-            } else {
-                other_color = 'black';
-            }
+
             board.set_go(r, c, other_color);
             var re = board.judge_result();
             if (re != 0) {
@@ -66,6 +80,7 @@ function Game() {
     }
 
     this.start_net_game = function (color, status) {
+        $('#back_button').hide();
         const CREATE = 0;
         const JOIN = 1;
         var other_color;
@@ -123,34 +138,44 @@ function Game() {
         if (status == CREATE) {
             $('#message').html('等待对手');
             $('#win_message').show();
-            socket.on('ok', function () {
-                end_wait();
-            })
+            
         } else {
             $('#message').html('正在加入');
-            socket.on('ok', function () {
-                end_wait();
-            })
         }
 
-
+        socket.on('ok', function (data) {
+            end_wait();
+            $('#back_button').show();
+            $('#black_name').html(data.black);
+            $('#white_name').html(data.white);
+        })
+        socket.on('end',function(data){
+            init();
+            disconnect();
+        });
+        socket.on('no_room',function(data){
+            show_message('房间不存在');
+        });
     }
 
-    function disconnect() {
-        $('#message').html('对手掉线');
+    function show_message(str){
+        $('#message').html(str);
         $('#win_message').show();
+        $('#back_button').hide();
+    }
+    function disconnect() {
+        show_message('对手掉线');
     }
 
 
 
     function win(state) {
         if (state == 1) {
-            $('#message').html('黑棋胜利');
+            show_message('黑棋胜利');
         } else if (state == 2) {
-            $('#message').html('白棋胜利');
+            show_message('白棋胜利');
         } else {
             return;
         }
-        $('#win_message').show();
     }
 }

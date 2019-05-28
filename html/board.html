@@ -22,16 +22,27 @@
 </head>
 
 <body>
-	<div id="main_board">
-		<div id='win_message'>
+	<div id="main_board" class="form-inline container">
+		<div id="black_name_item" class="user_item col-2">
+			<img src="/resources/black_go.png" class="user_go" />
+			<p id="black_name"></p>
+		</div>
+		<div id="game_bg">
+		</div>
+		<div id="white_name_item" class="user_item col-2">
+			<img src="/resources/white_go.png" class="user_go" />
+			<p id="white_name"></p>
+		</div>
+		<div id='win_message' class="">
 			<p id='message'></p>
 			<a class="btn btn-default btn-lg btn-primary button-margin back_to_room" href="/room.html"
 				role="button">返回</a>
 		</div>
-		<div id="game_bg">
-		</div>
 	</div>
-
+	<div id='back_button' class="">
+		<a class="btn btn-default btn-lg btn-primary button-margin back_to_room" href="/room.html"
+			role="button">退出房间</a>
+	</div>
 	<script type="text/javascript">
 		$(document).ready(function () {
 			var game = new Game();
@@ -41,10 +52,10 @@
 			} else if (type == AI) {
 				var color = get_url_para('color');
 				game.start_with_ai(color);
-			}else if(type==HUMAN){
-				var color=get_url_para('color');
-				var status=get_url_para('status');
-				game.start_net_game(color,status);
+			} else if (type == HUMAN) {
+				var color = get_url_para('color');
+				var status = get_url_para('status');
+				game.start_net_game(color, status);
 			}
 		});
 

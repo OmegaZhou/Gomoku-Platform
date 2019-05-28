@@ -111,3 +111,16 @@ body{
 #room_list{
     text-align: center;
 }
+
+.user_go{
+    position: relative;
+    margin: 2%;
+    width: 20%;
+    height: 20%;
+}
+.user_item{
+    text-align: center;
+    background-color: rgb(102, 102, 99);
+    position: relative;
+    top: -100px;
+}

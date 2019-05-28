@@ -7,7 +7,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var database = require('./lib/database');
 var ai = require('./lib/ai');
-
+var delete_room=require('./lib/delete_room');
 
 var mysql = new database();
 app.use("/resources", express.static("resources"));
@@ -53,7 +53,13 @@ app.get('/board.html', function (req, res) {
         res.sendFile(__dirname + '/html/index.html');
     }
 });
-
+app.post('/get_name', function (req, res) {
+    if (req.session.user_id) {
+        res.json({ success: 1, name: req.session.user_name });
+    } else {
+        res.json({ success: 0 });
+    }
+});
 app.post('/get_place', bodyParser.json(), function (req, res) {
     //console.log(req.body);
     if (req.body.user_id == 0) {
@@ -94,9 +100,9 @@ app.post('/create_room', bodyParser.json(), function (req, res) {
                 continue;
             } else {
                 if (req.body.color == 'black') {
-                    room.set(i, { black: req.session.user_name, white: '' });
+                    room.set(i.toString(), { black: req.session.user_name, white: '' });
                 } else {
-                    room.set(i, { white: req.session.user_name, black: '' });
+                    room.set(i.toString(), { white: req.session.user_name, black: '' });
                 }
                 res.send(i.toString());
                 break;
@@ -112,7 +118,10 @@ app.post('/join', bodyParser.json(), function (req, res) {
         var flag = 1;
         for (var i of room) {
             if (req.body.room_id == i[0]) {
-
+                if(i[1].black==req.session.user_name||i[1].white == req.session.user_name){
+                    flag=2;
+                    break;
+                }
                 if (i[1].black == '') {
                     i[1].black = req.session.user_name;
                 } else if (i[1].white == '') {
@@ -120,14 +129,11 @@ app.post('/join', bodyParser.json(), function (req, res) {
                 } else {
                     flag = 0;
                 }
-                res.send(flag.toString());
-                flag = -2;
+                
                 break;
             }
         }
-        if (flag != -2) {
-            res.send('0');
-        }
+        res.send(flag.toString());
 
     } else {
         res.send('-1');
@@ -147,27 +153,59 @@ var socket_to_room = new Map();
 io.sockets.on('connection', function (socket) {
     console.log(socket.id);
     socket.on('room_info', function (data) {
+        if(!room.has(data.room_id)){
+            if(io.sockets.connected[socket.id]){
+                io.sockets.connected[socket.id].emit('no_room');
+            }
+        }
         socket_to_room.set(socket.id, data.room_id);
         if (!room_to_socket.has(data.room_id)) {
-            room_to_socket.set(data.room_id, {black:'', white:''});
+            room_to_socket.set(data.room_id, { black: '', white: '' });
             room_to_socket.get(data.room_id)[data.color] = socket.id;
         } else {
             room_to_socket.get(data.room_id)[data.color] = socket.id;
-            io.sockets.connected[ room_to_socket.get(data.room_id).white].emit('ok');
-            io.sockets.connected[ room_to_socket.get(data.room_id).black].emit('ok');
+            var b_id = room_to_socket.get(data.room_id).black;
+            var w_id = room_to_socket.get(data.room_id).white;
+            var user_name=room.get(data.room_id);
+            if(io.sockets.connected[w_id]){
+                io.sockets.connected[w_id].emit('ok',{ black: user_name.black, white: user_name.white });
+            }
+            if(io.sockets.connected[b_id]){
+                io.sockets.connected[b_id].emit('ok',{ black: user_name.black, white: user_name.white });
+            }
         }
     });
-    socket.on('set_go',function(data){
+    socket.on('set_go', function (data) {
         var color;
-        if(data.color=='white'){
-            color='black';
-        }else{
-            color='white';
+        if (data.color == 'white') {
+            color = 'black';
+        } else {
+            color = 'white';
         }
-        io.sockets.connected[room_to_socket.get(data.room_id)[color]].emit('other_turn',{state:0,r:data.r,c:data.c});
+        var to = room_to_socket.get(data.room_id)[color];
+        if (io.sockets.connected[to]) {
+            io.sockets.connected[to].emit('other_turn', { state: 0, r: data.r, c: data.c });
+        }
+
     });
     socket.on('disconnect', function () {
-        console.log('User disconnected');
+        if(!socket_to_room.has(socket.id)){
+            return;
+        }
+        var room_id=socket_to_room.get(socket.id);
+        var black=room_to_socket.get(room_id).black;
+        var white=room_to_socket.get(room_id).white;
+        if(socket.id==black){
+            if (io.sockets.connected[white]) {
+                io.sockets.connected[white].emit('end');
+            }
+        }else{
+            if (io.sockets.connected[black]) {
+                io.sockets.connected[black].emit('end');
+            }
+        }
+        delete_room(room,room_to_socket,socket_to_room,socket.id);
+        console.log(room);
     });
 });
 
