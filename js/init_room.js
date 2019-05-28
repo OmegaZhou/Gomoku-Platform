@@ -3,6 +3,7 @@ function init_room() {
         $('#local_mode').show();
         $('#ai_mode').show();
         $('#net_mode').show();
+        $('#logout').show();
         $('#ai_menu').hide();
         $('#net_menu').hide();
         $('#net_color').hide();
@@ -14,7 +15,9 @@ function init_room() {
         $('#local_mode').hide();
         $('#ai_mode').hide();
         $('#net_mode').hide();
+        $('#logout').hide();
     };
+
     $('#ai_mode').click(function () {
         hide_room();
         $('#ai_menu').show();

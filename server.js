@@ -53,6 +53,12 @@ app.get('/board.html', function (req, res) {
         res.sendFile(__dirname + '/html/index.html');
     }
 });
+
+app.get('/logout',function(req,res){
+    req.session.destroy();
+    res.redirect('/index.html');
+})
+
 app.post('/get_name', function (req, res) {
     if (req.session.user_id) {
         res.json({ success: 1, name: req.session.user_name });
