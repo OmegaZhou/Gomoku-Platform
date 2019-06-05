@@ -69,7 +69,7 @@ app.post('/get_name', function (req, res) {
 app.post('/get_place', bodyParser.json(), function (req, res) {
     //console.log(req.body);
     if (req.body.user_id == 0) {
-        res.json(ai.next_step(req.body.place));
+        res.json(ai.next_step(req.body.place,req.body.color));
     }
 });
 

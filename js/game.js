@@ -48,7 +48,7 @@ function Game() {
         });
 
         var get_place = function () {
-            $.post('get_place', { user_id: 0, place: board.get_board() }, function (data) {
+            $.post('get_place', { user_id: 0, place: board.get_board(),color:human_color }, function (data) {
                 other_place(data.r, data.c, 0);
             })
         }
