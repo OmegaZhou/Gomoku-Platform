@@ -125,7 +125,14 @@ function Board() {
                 }
             }
         }
-        return 0;
+        for(var i=0;i<go_num;++i){
+            for(var j=0;j<go_num;++j){
+                if(go_mask[i][j]==0){
+                    return 0;
+                }
+            }
+        }
+        return -1;
     }
     this.get_board = function () {
         return go_mask;

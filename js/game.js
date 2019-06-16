@@ -174,7 +174,9 @@ function Game() {
             show_message('黑棋胜利');
         } else if (state == 2) {
             show_message('白棋胜利');
-        } else {
+        } else if(state==-1){
+            show_message('平局')
+        }else{
             return;
         }
     }
