@@ -74,3 +74,44 @@ THe back end is based on the Node.js and built by Express framework.
 * When two player both enter the room, server send the "ok" command to both.
 * Two player send the location of the go set to ther server and server forward the information to the other.
 * If someone disconnect, server send the "end" command to inform the other player that opponent has disconnected.
+
+## Directory Structure
+|-- gomoku-platform
+    |-- .gitignore
+    |-- ai_mode.png
+    |-- board.png
+    |-- config.json
+    |-- config_example.json
+    |-- join.png
+    |-- main_room.png
+    |-- net_mode.png
+    |-- package-lock.json
+    |-- package.json
+    |-- README.md
+    |-- server.js
+    |-- signin.png
+    |-- signup.png
+    |-- css
+    |   |-- style.css
+    |-- html
+    |   |-- board.html
+    |   |-- index.html
+    |   |-- room.html
+    |-- js
+    |   |-- board.js
+    |   |-- game.js
+    |   |-- index.js
+    |   |-- init_room.js
+    |   |-- lib.js
+    |-- lib
+    |   |-- ai.js
+    |   |-- database.js
+    |   |-- delete_room.js
+    |-- resources
+    |   |-- black_go.png
+    |   |-- board_base.jpg
+    |   |-- wait_black_go.png
+    |   |-- wait_white_go.png
+    |   |-- white_go.png
+    |-- SQLs
+        |-- init_table.sql
