@@ -25,30 +25,30 @@ THe back end is based on the Node.js and built by Express framework.
 * Using the session to keep the login status in server.
 * Sign up page
 
-![sign up](signup.png)
+![sign up](README_img/signup.png)
 
 * Sign in page
 
-![sign in](signin.png)
+![sign in](README_img/signin.png)
 ### Main Room page
 * If user has signed in, user will enter the main page.
 * When user in the main page, there are three modes of the game to choose.
 * The main page
 
-![main room](main_room.png)
+![main room](README_img/main_room.png)
 
 * If user chooses the local play mode, user will enter the playing page.
 * If user chooses the ai play mode, user can choose what color he like to play and enter the playing page.
 
-![ai_mode](ai_mode.png)
+![ai_mode](README_img/ai_mode.png)
 
 * If user chooses the net play mode, user can create a room or join a room to play with others through the net and only the one who creates the room can choose the color of game.
 
-![net mode](net_mode.png)
+![net mode](README_img/net_mode.png)
 
 * Join Room page
 
-![join room](join.png)
+![join room](README_img/join.png)
 
 ### Gomoku Board
 * The board is built by HTML and CSS.
@@ -56,7 +56,7 @@ THe back end is based on the Node.js and built by Express framework.
 * The board is made up of many div with solid border.
 * Use the jQuery to change dom to change the board.
 
-![board](board.png)
+![board](README_img/board.png)
 ### Local Play Mode
 * For two local player to play.
 * When one set the go on the board, the color of the go is changed and turn to the other.
@@ -76,42 +76,44 @@ THe back end is based on the Node.js and built by Express framework.
 * If someone disconnect, server send the "end" command to inform the other player that opponent has disconnected.
 
 ## Directory Structure
+<pre>
 |-- gomoku-platform
     |-- .gitignore
-    |-- ai_mode.png
-    |-- board.png
-    |-- config.json
-    |-- config_example.json
-    |-- join.png
-    |-- main_room.png
-    |-- net_mode.png
+    |-- config.json		//The conifg information of databse.
     |-- package-lock.json
     |-- package.json
     |-- README.md
-    |-- server.js
-    |-- signin.png
-    |-- signup.png
-    |-- css
+    |-- server.js		//The server entry.
+    |-- css			//The folder save the CSS file.
     |   |-- style.css
-    |-- html
-    |   |-- board.html
-    |   |-- index.html
-    |   |-- room.html
-    |-- js
-    |   |-- board.js
+    |-- html			
+    |   |-- board.html		//Board page.
+    |   |-- index.html		//Login page.
+    |   |-- room.html		//Main page.
+    |-- js			//Save the javascript file used in html.
+    |   |-- board.js		
     |   |-- game.js
     |   |-- index.js
     |   |-- init_room.js
     |   |-- lib.js
-    |-- lib
+    |-- lib			//The module used for server.js
     |   |-- ai.js
     |   |-- database.js
     |   |-- delete_room.js
-    |-- resources
+    |-- README_img		//Save the image displayed in README.md 
+    |   |-- ai_mode.png
+    |   |-- board.png
+    |   |-- join.png
+    |   |-- main_room.png
+    |   |-- net_mode.png
+    |   |-- signin.png
+    |   |-- signup.png
+    |-- resources		//The resource folder.
     |   |-- black_go.png
     |   |-- board_base.jpg
     |   |-- wait_black_go.png
     |   |-- wait_white_go.png
     |   |-- white_go.png
-    |-- SQLs
-        |-- init_table.sql
+    |-- SQLs		
+        |-- init_table.sql	//Used for initialize database.
+</pre>
