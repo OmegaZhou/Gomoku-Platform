@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/OmegaZhou/Gomoku-Platform#readme",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "express": "^4.17.0",
+    "body-parser": "^1.20.1",
+    "express": "^4.18.2",
     "express-session": "^1.16.1",
     "http": "0.0.0",
     "jsonfile": "^5.0.0",
